@@ -1,0 +1,40 @@
+{
+  "name": "cold-template",
+  "description": "Compile time Template Literal transformation",
+  "homepage": "http://github.com/Constellation/cold-template",
+  "main": "index.js",
+  "version": "0.0.1-dev",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "maintainers": [
+    {
+      "name": "Yusuke Suzuki",
+      "email": "utatane.tea@gmail.com",
+      "web": "http://github.com/Constellation"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Constellation/cold-template.git"
+  },
+  "dependencies": {
+    "es6-map": "^0.1.1",
+    "estraverse": "^1.9.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-6to5": "^1.0.2",
+    "gulp-mocha": "^2.0.0"
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "http://github.com/Constellation/cold-template/raw/master/LICENSE.BSD"
+    }
+  ],
+  "scripts": {
+    "test": "gulp travis",
+    "release": "gulp build && npm publish ."
+  }
+}
