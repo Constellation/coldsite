@@ -32,8 +32,8 @@ class Injector extends estraverse.Controller {
         this.compilers = new Map();
     }
 
-    add(name, compiler) {
-        this.compilers.add(name, compiler);
+    register(compiler) {
+        this.compilers.set(compiler.tag, compiler);
     }
 
     inject(tree) {

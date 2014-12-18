@@ -24,25 +24,55 @@
 
 'use strict';
 
-var gulp = require('gulp');
-var mocha = require('gulp-mocha');
-var to5 = require('gulp-6to5');
+var gulp = require('gulp'),
+    gutil = require('gulp-util'),
+    mocha = require('gulp-mocha'),
+    to5 = require('gulp-6to5'),
+    espower = require('gulp-espower'),
+    sourcemaps = require('gulp-sourcemaps'),
+    pegjs = require('gulp-peg'),
+    merge = require('merge-stream'),
+    _ = require('lodash');
 
 var TEST = [ 'test/*.js' ];
-var SOURCE = [ 'src/*.js' ];
+var POWERED = [ 'powered-test/*.js' ];
+var SOURCE = {
+    'js': [ 'src/**/*.js' ],
+    'pegjs': ['src/**/*.pegjs ' ],
+};
 
-gulp.task('build', function () {
-    return gulp.src(SOURCE)
+gulp.task('build', [ 'build:pegjs', 'build:js' ]);
+
+gulp.task('build:pegjs', function () {
+    return gulp.src(SOURCE.pegjs).pipe(pegjs().on('error', gutil.log))
         .pipe(to5())
         .pipe(gulp.dest('lib'));
 });
 
-gulp.task('test', function () {
+gulp.task('build:js', function () {
+    return gulp.src(SOURCE.js)
+        .pipe(to5())
+        .pipe(gulp.dest('lib'));
+});
+
+gulp.task('powered-test', function () {
     return gulp.src(TEST)
+        .pipe(to5())
+        .pipe(espower())
+        .pipe(gulp.dest('./powered-test/'));
+});
+
+gulp.task('test', [ 'powered-test' ], function () {
+    return gulp.src(POWERED)
         .pipe(mocha({
             reporter: 'spec',
             timeout: 100000 // 100s
         }));
+});
+
+gulp.task('watch', [ 'build' ], function () {
+    gulp.watch(SOURCE.js, [ 'build:js' ]);
+    gulp.watch(SOURCE.pegjs, [ 'build:pegjs' ]);
 });
 
 gulp.task('travis', [ 'test' ]);

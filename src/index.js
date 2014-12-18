@@ -22,17 +22,8 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-class Compiler {
-    constructor(name, tag = name) {
-        this.name = name;
-        this.tag = tag;
-    }
-
-    /**
-     * member AST compile(callsite AST) is needed.
-     */
-}
-
-module.exports = Compiler;
+module.exports = {
+    Injector: require('./injector')
+};
 
 /* vim: set sw=4 ts=4 et tw=80 : */

@@ -11,5 +11,6 @@ cover_html/
 
 # Generated
 lib/
+powered-test/
 
 npm-debug.log

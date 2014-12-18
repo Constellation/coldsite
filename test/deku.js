@@ -22,17 +22,41 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-class Compiler {
-    constructor(name, tag = name) {
-        this.name = name;
-        this.tag = tag;
-    }
+const fs = require('fs'),
+    path = require('path'),
+    root = path.join(path.dirname(fs.realpathSync(__filename)), '..'),
+    coldsite = require(root),
+    harmony = require('acorn-6to5'),
+    escodegen = require('escodegen'),
+    DekuCompiler = require(path.join(root, 'lib', 'compiler', 'deku')),
+    assert = require('power-assert');
 
-    /**
-     * member AST compile(callsite AST) is needed.
-     */
-}
+describe('deku compiler', () => {
+    it('compiler and injector exists', () => {
+        let injector = new coldsite.Injector();
+        let compiler = new DekuCompiler();
+        assert(compiler !== undefined);
+        assert(injector !== undefined);
+    });
 
-module.exports = Compiler;
+    it('compile JSX like syntax', () => {
+        let injector = new coldsite.Injector();
+        let compiler = new DekuCompiler();
+        injector.register(compiler);
+
+        let tree = harmony.parse('deku`<div className="OK" onClick=${this.onClick} ${...spread} hello="world">Hello World${test}<ButtonComponent/></div>`', { ecmaVersion: 6 });
+        let changed = injector.inject(tree);
+        assert(escodegen.generate(changed) === `
+dom('div', extend({
+    className: 'OK',
+    onClick: this.onClick
+}, spread, { hello: 'world' }), [
+    'Hello World',
+    test,
+    dom(ButtonComponent, null, null)
+]);
+`.trim());
+    });
+});
 
 /* vim: set sw=4 ts=4 et tw=80 : */
