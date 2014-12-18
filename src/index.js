@@ -22,8 +22,6 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-module.exports = {
-    Injector: require('./injector')
-};
+module.exports = require('./injector');
 
 /* vim: set sw=4 ts=4 et tw=80 : */

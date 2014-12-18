@@ -33,14 +33,14 @@ const fs = require('fs'),
 
 describe('deku compiler', () => {
     it('compiler and injector exists', () => {
-        let injector = new coldsite.Injector();
+        let injector = new coldsite();
         let compiler = new DekuCompiler();
         assert(compiler !== undefined);
         assert(injector !== undefined);
     });
 
     it('compile JSX like syntax', () => {
-        let injector = new coldsite.Injector();
+        let injector = new coldsite();
         let compiler = new DekuCompiler();
         injector.register(compiler);
 
